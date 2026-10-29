@@ -25,7 +25,7 @@ from .qzone.constants import (
     QZONE_MSG_NON_OBJECT_RESPONSE,
     QZONE_MSG_PERMISSION_DENIED,
 )
-from .utils import resolve_mentions
+from .utils import render_mentions, resolve_mentions
 
 
 class PostService:
@@ -339,8 +339,8 @@ class PostService:
         event: AiocqhttpMessageEvent | None = None,
         *,
         content: str | None = None,
-    ):
-        """评论帖子
+    ) -> str:
+        """评论帖子，返回本次实际发出的评论正文（可读文本，不含 @ 标记）
 
         content 不为空时直接用它，跳过插件自己的 LLM 生成——
         LLM 工具调用必须走这条路，否则用户指定的评论内容会被另一次
@@ -365,6 +365,8 @@ class PostService:
 
             # 把 @昵称 / @QQ号 换成 QQ 空间认的真提及标记
             content = self.resolve_post_mentions(post, content, event)
+            # 通知 / 日志里展示可读文本（@昵称），实际发送仍用上面的标记
+            readable = render_mentions(content)
 
             # 必须检查接口结果：旧实现直接忽略返回值，评论其实没发出去，
             # 也会记账成“已评论”，之后 no_commented 还会把它跳过。
@@ -386,6 +388,7 @@ class PostService:
             )
             await self.db.save(post)
             logger.info(f"评论 → {post.name}")
+            return readable
         finally:
             self._commenting.discard(key)
 

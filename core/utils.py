@@ -28,6 +28,29 @@ def _mention_markup(uin: int, nick: str) -> str:
 _MENTION_QQ_RE = re.compile(r"@(\d{5,12})(?!\d)")
 
 
+def render_mentions(text: str) -> str:
+    """把 ``@{uin:...,nick:...}`` 标记还原成可读的 ``@昵称``。
+
+    只用于日志 / 管理员通知这类展示场景；发给 QQ 空间的正文仍要用
+    原始标记（见 ``resolve_mentions``）。
+    """
+    if not text:
+        return text
+
+    def repl(match: re.Match[str]) -> str:
+        body = match.group(0).strip("@{} ")
+        for pair in body.split(","):
+            if ":" not in pair:
+                continue
+            key, value = pair.split(":", 1)
+            if key.strip() == "nick":
+                nick = value.strip()
+                return f"@{nick}" if nick else ""
+        return ""
+
+    return re.sub(r"@?\{uin:\s*\d+\s*[^{}]*\}", repl, text)
+
+
 def resolve_mentions(
     text: str,
     candidates: dict[str, int] | None = None,

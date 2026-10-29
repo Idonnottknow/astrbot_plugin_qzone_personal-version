@@ -148,10 +148,14 @@ class AutoComment(AutoRandomCronTask):
         )
         for post in posts:
             try:
-                await self.service.comment_posts(post)
+                content = await self.service.comment_posts(post)
                 if self.cfg.trigger.like_when_comment:
                     await self.service.like_posts(post)
-                await self.sender.send_admin_post(post, message="定时读说说")
+                message = "定时读说说"
+                # 通知里带上实际评论内容，管理员不用再点开空间看
+                if self.cfg.trigger.comment_notify_admin and content:
+                    message += f"\n评论：{content}"
+                await self.sender.send_admin_post(post, message=message)
             except Exception as e:
                 logger.exception(
                     f"[{self.job_name}] 跳过说说评论失败: tid={post.tid}, uin={post.uin}, name={post.name}, error={e}"

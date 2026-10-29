@@ -67,6 +67,12 @@ git clone https://github.com/Idonnottknow/astrbot_plugin_qzone_personal-version.
 - 例如 `publish_cron = 30 23 * * *` 且 `publish_offset = 600`，表示每天 23:30 前后 10 分钟内随机执行一次自动发说说。
 - 偏移设为 `0` 时严格按 Cron 时间触发。
 
+### 自动评论通知
+
+- `trigger.comment_notify_admin`（默认开）：机器人自动评论成功后（定时任务 / 聊天中概率触发），把被评论的说说、作者和**实际评论内容**发给管理群或管理员。
+- 和 `trigger.send_admin` 配合：`send_admin` 打开时卡片本身就私发给管理员，不再额外发文字通知；关闭时卡片发在原群，管理员会另外收到一条文字通知，不会重复两条。
+- 收件规则和审核一致：配了「管理群」发管理群，否则私聊 AstrBot 管理员账号。
+
 ## 🧰 已包含的历史修复
 
 以下改动早于「发说说审核」，都已包含在当前代码里，按当时的症状整理。

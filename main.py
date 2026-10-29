@@ -652,15 +652,28 @@ class QzonePlugin(Star):
             )
             for post in posts:
                 try:
-                    await self.service.comment_posts(post, event=event)
+                    content = await self.service.comment_posts(post, event=event)
                     if self.cfg.trigger.like_when_comment:
                         await self.service.like_posts(post)
+
+                    notify = self.cfg.trigger.comment_notify_admin
+                    message = "触发读说说"
+                    if notify and content:
+                        message += f"\n评论：{content}"
+
                     await self.sender.send_post(
                         event,
                         post,
-                        message="触发读说说",
+                        message=message,
                         send_admin=self.cfg.trigger.send_admin,
                     )
+
+                    # send_admin 关着时卡片发在原群，管理员另外收一条文字通知，
+                    # 否则管理员已经在上面那条卡片里看到了，不重复发。
+                    if notify and content and not self.cfg.trigger.send_admin:
+                        await self.sender.send_comment_notice(
+                            post, content, source="随机触发评论", event=event
+                        )
                 except Exception as e:
                     logger.error(e)
 

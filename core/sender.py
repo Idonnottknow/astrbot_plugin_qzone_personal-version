@@ -94,6 +94,52 @@ class Sender:
         if not succ and self.cfg.admins_id:
             await self._send_to_admins(client, obmsg)
 
+    async def send_admin_text(self, text: str, *, client: CQHttp | None = None) -> bool:
+        """给管理群 / 管理员发一条纯文本通知（不渲染卡片）"""
+        client = client or self.cfg.client
+        if not client or not (text or "").strip():
+            return False
+
+        obmsg = await AiocqhttpMessageEvent._parse_onebot_json(
+            MessageChain([Plain(text)])
+        )
+        if self.cfg.manage_group and await self._send_to_manage_group(client, obmsg):
+            return True
+        if self.cfg.admins_id:
+            await self._send_to_admins(client, obmsg)
+            return True
+        return False
+
+    async def send_comment_notice(
+        self,
+        post: Post,
+        content: str,
+        *,
+        source: str = "自动评论",
+        event: AstrMessageEvent | None = None,
+    ) -> bool:
+        """通知管理群 / 管理员：机器人自动评论了谁的哪条说说"""
+        client = getattr(event, "bot", None) or self.cfg.client
+        author = (post.name or "").strip() or str(post.uin)
+        lines = [f"【{source}】机器人已自动评论"]
+
+        try:
+            group_id = str(event.get_group_id() or "") if event is not None else ""
+        except Exception:
+            group_id = ""
+        if group_id:
+            lines.append(f"来源群：{group_id}")
+
+        lines.append(f"对象：{author}（{post.uin}）")
+        if content:
+            lines.append(f"评论：{content}")
+
+        preview = " ".join((post.text or "").split())
+        if preview:
+            lines.append(f"原文：{preview[:60]}{'…' if len(preview) > 60 else ''}")
+
+        return await self.send_admin_text("\n".join(lines), client=client)
+
     async def send_post_to(
         self,
         post: Post,

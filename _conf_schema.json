@@ -136,6 +136,12 @@
                 "type": "bool",
                 "default": false
             },
+            "comment_notify_admin": {
+                "description": "自动评论后通知管理员",
+                "hint": "定时自动评论 / 聊天中概率触发评论成功后, 把被评论的说说和评论内容发给管理群或管理员",
+                "type": "bool",
+                "default": true
+            },
             "like_when_comment": {
                 "description": "评说说时是否自动点赞",
                 "hint": "在评论完说说后会自动给此说说点赞",

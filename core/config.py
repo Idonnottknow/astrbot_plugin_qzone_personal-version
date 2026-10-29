@@ -144,6 +144,7 @@ class TriggerConfig(ConfigNode):
     comment_offset: int
     read_prob: float
     send_admin: bool
+    comment_notify_admin: bool
     like_when_comment: bool
 
 
