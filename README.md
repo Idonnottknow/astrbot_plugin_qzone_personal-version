@@ -1,9 +1,5 @@
 # astrbot_plugin_qzone_personal_version
 
-![version](https://img.shields.io/badge/version-v3.2.1-blue)
-![AstrBot](https://img.shields.io/badge/AstrBot-4.x-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
-
 _✨ [AstrBot](https://github.com/AstrBotDevs/AstrBot) QQ空间对接插件 · 个人版 ✨_
 
 本仓库是 [Zhalslar/astrbot_plugin_qzone](https://github.com/Zhalslar/astrbot_plugin_qzone) 的个人分支（基于 v3.1.3）。主要改动是**机器人自己发说说前先交给管理员审核**，此外还累积了一批评论、回复、昵称显示相关的修复（见下文「已包含的历史修复」）。
