@@ -1,6 +1,6 @@
 # astrbot_plugin_qzone_personal_version
 
-![version](https://img.shields.io/badge/version-v3.2.0-blue)
+![version](https://img.shields.io/badge/version-v3.2.1-blue)
 ![AstrBot](https://img.shields.io/badge/AstrBot-4.x-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
