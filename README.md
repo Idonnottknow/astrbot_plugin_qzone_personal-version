@@ -32,16 +32,6 @@ git clone https://github.com/Idonnottknow/astrbot_plugin_qzone_personal-version.
 
 > 插件名是 `astrbot_plugin_qzone_personal_version`，与原版的 `astrbot_plugin_qzone` 是两个不同插件，**不要同时安装**，否则命令和 LLM 工具会重复注册。
 
-## 🔄 更新
-
-本插件已把更新源绑定到本仓库，「更新」只会从本仓库拉取，不会去动插件市场里的原版。
-
-GitHub 在国内直连偶尔会超时，更新时如果报下载失败，在更新弹窗的「下载加速 / 代理」里填一个加速前缀再试：
-
-```text
-https://ghfast.top
-```
-
 ## ⌨️ 配置
 
 请前往插件配置面板进行配置。说说和系统消息统一使用内置卡片渲染器，渲染失败时自动回退为纯文本。
